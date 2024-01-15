@@ -1,0 +1,20 @@
+- Setup for this project
+  . npx create-next-app@latest
+    - Project name: portfolio-app-router-3
+    - Would you like to use Typescript? Yes
+    - Would you like to use ESLint? Yes
+    - Would you like to use Tailwind CSS? No
+    - Would you like to use `src/` directory? Yes (We did not use this in the prev project)
+    - Would you like to use App Router (recommended)? Yes (not sure we use this at the prev project)
+    - Would you like to customize the default import alias (@/*)? No
+
+- next folder is like a compiled version of src folder.
+  . It is like `build` or `dist`
+
+- New page building
+  src --- app
+            page.tsx --- localhost:3000/(empty)
+            blogs(folder)
+              page.tsx --- localhost:3000/blogs/
+              summary(folder)
+                page.tsx --- localhost:3000/blogs/summary
