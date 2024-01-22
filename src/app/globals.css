@@ -1,3 +1,39 @@
-body {
+/* body {
   padding: 200px;
+} */
+
+.page-container {
+  padding: 200px;
+}
+
+.content-section-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px; 
+}
+
+.content-list {
+  padding: 10px;
+  display: flex;
+}
+
+.content-item {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid gray;
+  margin: 5px;
+  padding: 5px;
+}
+
+.content-item__image-container {
+  /* 
+    [Important]
+    To use fill={true}, in the Image component
+    `position: relative;` must be used in the parent component.
+    otherwise, the image will fill up the entire browser.
+    So `position: relative;` is a role to decide where the image is filled.
+  */
+  position: relative;
+  height: 200px;
 }
