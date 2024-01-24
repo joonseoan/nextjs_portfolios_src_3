@@ -38,3 +38,14 @@
     - Client Side rendering
 
       Browser request ----> Server Response for Empty HTML and JS file---> Browser renders HTML on the basis of Javascript 
+
+- API Route
+  API Route will not render any HTML document, but rather we can make a request
+  to the server and we can do some tasks on the server such as db manipulation,
+  returning data, processing authentication, etc.
+
+  create a api folder inside app folder.
+  api/blogs/route.ts
+  api/portfolios/route.ts
+  In the browser, localhost:3000/api/blogs or localhost:3000/api/portfolios 
+  ****** Do not use localhost:3000/api/blogs/route

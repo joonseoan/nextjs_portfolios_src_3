@@ -37,3 +37,14 @@
   position: relative;
   height: 200px;
 }
+
+.content-item__label {
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* IMPORTANT */
+.content-item__label > div:nth-child(1) {
+  font-size: 20px;
+  font-weight: bold;
+}

@@ -22,62 +22,39 @@ export interface TestData {
 }
 
 import Test from "@/components/Test";
-import blogs from "@/contents/blogs.json";
+// Using json file
+// import blogs from "@/contents/blogs.json";
 import portfolios from "@/contents/portfolio.json";
 import Image from "next/image";
+import { BlogList } from "@/components/blogs/BlogList";
+import { PortfolioList } from "@/components/portfolios/PortfolioList";
+
+/**
+ * In the previous version, we need to use `getStaticProps`
+ * or `getServerSideProps` in order to get api data
+ * in the server side rending but in the latest version,
+ * we can simple build any function.
+ */
+
+async function getBlogs(): Promise<{ data: TestData[] }> {
+  const res = await fetch('http://localhost:3000/api/blogs');
+
+  if (!res.ok) {
+    throw new Error('Unable to get blogs');
+  }
+
+  return res.json();
+}
+
 
 // This page is going to be the default page for the project
-export default function Home() {
-  const _blogs = blogs.map(({ id, title, description, coverImage }) => (
-    <div key={id} className="content-item">
-      <div className="content-item__image-container">
-        {/* For Image, `next.config.js` should have configuration for the domain. */}
-        <Image
-          src={coverImage}
-          alt={id}
-          // [IMPORTANT]
-          // 2) If we would like ti fill up the given size in the parent,
-          fill={true}
-          // 1)
-          // To decide the image size
-          // width={100}
-          // height={100}
-          objectFit="cover"
-        />
-      </div>
-      <div >{title}</div>
-      <div>{description}</div>
-    </div>
-  ));
-
-  const _portfolios = portfolios.map(({ id, title, description, coverImage }) => (
-    <div key={id} className="content-item">
-      <div className="content-item__image-container">
-        {/* For Image, `next.config.js` should have configuration for the domain. */}
-        <Image
-          src={coverImage}
-          alt={id}
-          // [IMPORTANT]
-          // 2) If we would like ti fill up the given size in the parent,
-          fill={true}
-          // 1)
-          // To decide the image size
-          // width={100}
-          // height={100}
-          objectFit="cover"
-        />
-      </div>
-      <div>{title}</div>
-      <div>{description}</div>
-    </div>
-  ));
+export default async function Home() {
+  const { data: blogs } = await getBlogs();
 
   return (
     <>
-      <div className="content-section-title">Blogs</div>
-      <div className="content-list">{_blogs}</div>
-      <div className="content-section-title">Portfolios</div>
-      <div className="content-list">{_portfolios}</div>
+      <BlogList blogs={blogs} />
+      <PortfolioList portfolios={portfolios} />
     </>
   );
 }
