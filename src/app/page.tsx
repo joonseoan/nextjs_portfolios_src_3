@@ -37,8 +37,9 @@ import { PortfolioList } from "@/components/portfolios/PortfolioList";
  */
 
 async function getBlogs(): Promise<{ data: TestData[] }> {
+  console.log('Fetching Blogs')
   const res = await fetch('http://localhost:3000/api/blogs');
-
+  console.log('Getting Blogs')
   if (!res.ok) {
     throw new Error('Unable to get blogs');
   }
@@ -49,6 +50,13 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
 
 // This page is going to be the default page for the project
 export default async function Home() {
+  // [IMPORTANT!!!!!]
+  // Even though the server has 1 or 2 second delay (settimeout),
+  // the client does not have the delay for the data.
+  // This is happening because this data are getting pre-rendered on the server at the build time.
+  // Please, make sure that all pages are pre rendered in the serve *** at the build time ***
+  // before the client requests `localhost:3000`.
+  // Add console.log above in `getBlogs()` function and `yarn run build`
   const { data: blogs } = await getBlogs();
 
   return (
