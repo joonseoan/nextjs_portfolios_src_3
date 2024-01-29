@@ -13,32 +13,46 @@
 // we can see "page.js" again in the network tab which means
 // the client with HTML is retrieved from the server.
 
+import Test from "@/components/Test";
+// Using json file
+// import blogs from "@/contents/blogs.json";
+// import portfolios from "@/contents/portfolio.json";
+import { BlogList } from "@/components/blogs/BlogList";
+import { PortfolioList } from "@/components/portfolios/PortfolioList";
+
 export interface TestData {
   id: string;
   slug: string;
   title: string;
   description: string;
   coverImage: string;
-}
-
-import Test from "@/components/Test";
-// Using json file
-// import blogs from "@/contents/blogs.json";
-import portfolios from "@/contents/portfolio.json";
-import Image from "next/image";
-import { BlogList } from "@/components/blogs/BlogList";
-import { PortfolioList } from "@/components/portfolios/PortfolioList";
+};
 
 /**
  * In the previous version, we need to use `getStaticProps`
  * or `getServerSideProps` in order to get api data
  * in the server side rending but in the latest version,
- * we can simple build any function.
+ * we can simply build any function.
  */
 
+// [IMPORTANT!!!!!]
+// Even though the server in API folder has 1 or 2 second delay (settimeout),
+// the client does not have the delay for getting the data in ****** production.
+// This is happening because API folder and this `page` are in the same localhost:3000
+// and then this data are getting pre-rendered on the server at the build time
+// before requesting `page` from the browser.
+// Please, make sure that all pages are pre rendered in the serve *** at the build time ***
+// before the client requests `localhost:3000`.
+// Add console.log in `getBlogs()` function and `yarn run build`
+// Then we will figure out the fetching data happens in the build time.
+// This is a *** server side rendering ***.
+// TODO:
+// 1) Let's think about static rendering contains only html file.
+// 2) Also we can use useEffect for the client side rendering
 async function getBlogs(): Promise<{ data: TestData[] }> {
   console.log('Fetching Blogs')
-  const res = await fetch('http://localhost:3000/api/blogs');
+  // In refreshing with {cache: 'no-cache'}, it will take a delay to render the page.
+  const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
   console.log('Getting Blogs')
   if (!res.ok) {
     throw new Error('Unable to get blogs');
@@ -47,17 +61,21 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
   return res.json();
 }
 
+async function getPortfolios(): Promise<{ data: TestData[] }> {
+  console.log('Fetching Portfolios')
+  const res = await fetch('http://localhost:3000/api/portfolios', { cache: 'no-cache' });
+  console.log('Getting Portfolios')
+  if (!res.ok) {
+    throw new Error('Unable to get Portfolios');
+  }
+
+  return res.json();
+}
 
 // This page is going to be the default page for the project
 export default async function Home() {
-  // [IMPORTANT!!!!!]
-  // Even though the server has 1 or 2 second delay (settimeout),
-  // the client does not have the delay for the data.
-  // This is happening because this data are getting pre-rendered on the server at the build time.
-  // Please, make sure that all pages are pre rendered in the serve *** at the build time ***
-  // before the client requests `localhost:3000`.
-  // Add console.log above in `getBlogs()` function and `yarn run build`
   const { data: blogs } = await getBlogs();
+  const { data: portfolios } = await getPortfolios();
 
   return (
     <>
@@ -75,6 +93,7 @@ export default async function Home() {
 // "use client" // it creates a `page.js` request in browser's network tab 
 
 // import { useEffect } from "react"
+import Portfolios from './portfolios/page';
 
 // // This page is going to be the default page for the project
 // export default function Home() {
