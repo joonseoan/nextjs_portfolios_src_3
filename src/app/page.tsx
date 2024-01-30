@@ -41,10 +41,13 @@ export interface TestData {
 // This is happening because API folder and this `page` are in the same localhost:3000
 // and then this data are getting pre-rendered on the server at the build time
 // before requesting `page` from the browser.
-// Please, make sure that all pages are pre rendered in the serve *** at the build time ***
+// Please, make sure that all server side pages are pre rendered in the serve *** at the build time ***
 // before the client requests `localhost:3000`.
 // Add console.log in `getBlogs()` function and `yarn run build`
 // Then we will figure out the fetching data happens in the build time.
+// and then cached in the browser. If the data is not cached, it will generate the build error.
+// --------------> Why? The function is called in that API build time!!!! 
+// FYI, please make sure that the function inside api folder does not work in build time.
 // This is a *** server side rendering ***.
 // TODO:
 // 1) Let's think about static rendering contains only html file.
