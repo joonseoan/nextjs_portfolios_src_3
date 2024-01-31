@@ -35,26 +35,43 @@ export interface TestData {
  * we can simply build any function.
  */
 
-// [IMPORTANT!!!!!]
-// Even though the server in API folder has 1 or 2 second delay (settimeout),
-// the client does not have the delay for getting the data in ****** production.
-// This is happening because API folder and this `page` are in the same localhost:3000
-// and then this data are getting pre-rendered on the server at the build time
-// before requesting `page` from the browser.
-// Please, make sure that all server side pages are pre rendered in the serve *** at the build time ***
-// before the client requests `localhost:3000`.
-// Add console.log in `getBlogs()` function and `yarn run build`
-// Then we will figure out the fetching data happens in the build time.
-// and then cached in the browser. If the data is not cached, it will generate the build error.
-// --------------> Why? The function is called in that API build time!!!! 
-// FYI, please make sure that the function inside api folder does not work in build time.
-// This is a *** server side rendering ***.
-// TODO:
-// 1) Let's think about static rendering contains only html file.
-// 2) Also we can use useEffect for the client side rendering
+/**  
+  [IMPORTANT!!!!!]
+  Even though the function `GET` function in the server has 1 or 2 second delay (settimeout),
+  the client does not have the delay for getting the data.
+  This is happening because API folder and this `page` are in the same localhost:3000
+  and then this data are getting pre-rendered on the server at the build time.
+  It works like static data with `getStaticProps` in the previous version.
+
+  Add console.log in `getBlogs()` function and `yarn run build`
+  Then we can see the fetching data happens in the build time.
+  and then `cached` in the browser. 
+  If the data is not cached, it will generate the build error.
+  The function is called but the API data fetch in that build time can't work!!!! 
+
+  FYI, please make sure that the function inside api folder does work in build time.
+  This is a *** Static Data with former getStatic props ***.
+
+  TODO
+  1) Let's think about the component with former getStaticProps.  
+ */
+
+// We can't use React Hooks in the page with former getStaticProps or getServerSideProps
 async function getBlogs(): Promise<{ data: TestData[] }> {
   console.log('Fetching Blogs')
-  // In refreshing with {cache: 'no-cache'}, it will take a delay to render the page.
+  /**
+   * With { cache: defaultValue }, it works like a static prop page with `getStaticProps`
+   * because the data is cached after fetching the data in the build time
+   * 
+   * In other word, with { cache: 'no-cache' }, it works lik a server side rendering page
+   * with `getServerSideProps` which means API fetching does now work in the build time.
+   * It generates the error in the build time! So the server must be outside this app
+   * to resolve this issue that can maintain static props data page with getStaticProps
+   * with any options { cache: 'any options' }
+   * 
+   * BTW, however it works in the running time because the data is not cached. So we can find 
+   * the delay to fetch the data in the running time.
+   */
   const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
   console.log('Getting Blogs')
   if (!res.ok) {
