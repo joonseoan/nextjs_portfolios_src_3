@@ -59,7 +59,12 @@ export interface TestData {
 // We can't use React Hooks in the page with former getStaticProps or getServerSideProps
 async function getBlogs(): Promise<{ data: TestData[] }> {
   console.log('Fetching Blogs')
+
+  // Since setting up the separate backend, it works in the build time.
+  const res = await fetch('http://localhost:4000/api/blogs', { cache: 'no-cache' });
+
   /**
+   * [IMPORTANT!!!]
    * With { cache: defaultValue }, it works like a static prop page with `getStaticProps`
    * because the data is cached after fetching the data in the build time
    * 
@@ -72,8 +77,8 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
    * BTW, however it works in the running time because the data is not cached. So we can find 
    * the delay to fetch the data in the running time.
    */
-  const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
-  console.log('Getting Blogs')
+  // const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
+  // console.log('Getting Blogs')
   if (!res.ok) {
     throw new Error('Unable to get blogs');
   }
@@ -83,7 +88,8 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
 
 async function getPortfolios(): Promise<{ data: TestData[] }> {
   console.log('Fetching Portfolios')
-  const res = await fetch('http://localhost:3000/api/portfolios', { cache: 'no-cache' });
+  // Since setting up the backend, it works in the build time
+  const res = await fetch('http://localhost:4000/api/portfolios', { cache: 'no-cache' });
   console.log('Getting Portfolios')
   if (!res.ok) {
     throw new Error('Unable to get Portfolios');
