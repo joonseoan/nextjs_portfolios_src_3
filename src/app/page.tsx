@@ -32,16 +32,17 @@ export interface TestData {
  * In the previous version, we need to use `getStaticProps`
  * or `getServerSideProps` in order to get api data
  * in the server side rending but in the latest version,
- * we can simply build any function.
+ * we can simply build any function with `fetch`'s { cache: no-cache } (for server side rendering)
+ * and fetch's default cache { cache: defaultValue } (for static rendering)
  */
-
 
 /**
  * [Build Stage] ---> Not in the server
- * For this page (in Server Side Rendering), we will not render any HTML document.
- * We will create a Javascript file. The javascript functions
- * including functions fetching data and rendering the page
- * will generate HTML document with Virtual DOM
+ * For other than this page (`/`), HTML page is created and then rendered.
+ * 
+ * However, for this page (`/` in Server Side Rendering), we will not render any HTML document.
+ * We will create a Javascript file. The handler functions fetching data and rendering the page
+ * will generate HTML document with Virtual DOM when it requested. (Slower but it can get the refreshed data)
  * 
  * For `Blogs` and `Portfolio` page, it just generates HTML.
  * 
@@ -54,12 +55,9 @@ export interface TestData {
  * 
  * However, for this page, it is a little bit different. The Javascript function (router)
  * tries to get '/' page but the HTML document in the server is not prepared. The router function
- * requests the page, it starts preparing HTML and the handler function responsible fetching data and rendering the page
- * starts running and then generates the HTML page.
- *  
- * 
- * 
- * 
+ * requests the page, it starts preparing HTML and the handler functions (functions fetching api data
+ * and rendering Virtual DOM) starts running and then generates the HTML page. After the HTML document
+ * is created, the server will send it to the browser.
  */
 
 /**  
@@ -67,11 +65,13 @@ export interface TestData {
   Even though the function `GET` function in the server has 1 or 2 second delay (settimeout),
   the client does not have the delay for getting the data.
   This is happening because API folder and this `page` are in the same localhost:3000
-  and then this data are getting pre-rendered on the server at the build time.
+  and { cache: defaultValue } in `fetch` cached the data in the browser. 
+  Then this HTML created by Virtual DOM is getting pre-rendered on the server in the build time.
 
   Add console.log in `getBlogs()` function and `yarn run build`
   Then we can see the fetching data happens in the build time.
   and then `cached` in the browser. 
+  
   If the data is not cached, it will generate the build error.
   The function is called but the fetching and response does not work!!!!
   For example, run yarn run build with await fetch('http://localhost:3000/api/blogs')
@@ -88,19 +88,21 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
   /**
    * [IMPORTANT!!!]
    * With { cache: defaultValue }, As mentioned above, the data is cached in the browser. 
-   * Therefore, there is no error in build time because the API function does not sending the data.
-   * (The function is called BTW)
+   * Therefore, there is no error in build time because the API function does not send the data.
+   * (The function is called BTW). It uses the data cached in the browser. And then
+   * it prepares HTML in the build time. Therefore it is `Static rendering` that HTML is prepared.
+   * However, it can't refresh the data.
    * 
-   * In other word, with { cache: 'no-cache' }, it works lik a server side rendering page
-   * with `getServerSideProps` which means it should response with data. 
-   * In this case, it does not work time and generates error in the build!
-   * So the server must be outside this app
-   * to resolve this issue that can maintain static props data page with getStaticProps
-   * with any options { cache: 'any options' }
+   * On the other hand, with { cache: 'no-cache' }, it works in a way of a `server side rendering`.
+   * The page works like with `getServerSideProps`.
+   * In this case, it does not work and generate an error in the build! 
+   * if we use the local server in the same port because it tries to fetch data in build time.
+   * So the BE server must be outside this app with {cache: 'no-cache' }
    * 
-   * BTW, however it works in the running time because the data is not cached. So we can find 
+   * BTW, however it works in the running time stage because BE server is running . So we can find 
    * the delay to fetch the data in the running time.
    */
+
   // const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
   // console.log('Getting Blogs')
   if (!res.ok) {
@@ -110,27 +112,42 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
   return res.json();
 }
 
-async function getPortfolios(): Promise<{ data: TestData[] }> {
+/**
+ * [Testing server side rendering and static rendering]
+ * 1. Delete { cache: 'no-cache' } or Create { cache: 'no-cache' } again.
+ * 2. Whenever delete or create { cache: 'no-cache' }, run `npm run build`.
+ * 3. After finish the build, please check out if there is `server-side-rendering` mark.
+ *    with { cache: 'no-cache'} it should display the server side rendering mark. Otherwise,
+ *    it should show us all static marks 
+ * 3. Then verify the random number is switching after `npm run dev`
+ * 4. If it is switching, it is `server-side rendering`, otherwise it is `static-rendering`
+ */
+
+async function getPortfolios(): Promise<{ portfolios: { data: TestData[] }, random: number }> {
+  await delay(2000);
+  const random = Math.random()
+
   console.log('Fetching Portfolios')
   // Since setting up the backend, it works in the build time
-  const res = await fetch('http://localhost:3000/api/portfolios', { cache: 'no-cache' });
+  const res = await fetch('http://localhost:3000/api/portfolios');
   console.log('Getting Portfolios')
   if (!res.ok) {
     throw new Error('Unable to get Portfolios');
   }
 
-  return res.json();
+  return { portfolios: await res.json(), random };
 }
 
 // This page is going to be the default page for the project
 export default async function Home() {
   const { data: blogs } = await getBlogs();
-  const { data: portfolios } = await getPortfolios();
+  const { portfolios: { data: _portfolios }, random } = await getPortfolios();
 
   return (
     <>
+      <h1>{random}</h1>
       <BlogList blogs={blogs} />
-      <PortfolioList portfolios={portfolios} />
+      <PortfolioList portfolios={_portfolios} />
     </>
   );
 }
@@ -144,6 +161,7 @@ export default async function Home() {
 
 // import { useEffect } from "react"
 import Portfolios from './portfolios/page';
+import { delay } from "@/utils";
 
 // // This page is going to be the default page for the project
 // export default function Home() {
