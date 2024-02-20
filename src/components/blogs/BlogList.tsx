@@ -1,7 +1,15 @@
 import Image from "next/image";
 import { TestData } from "@/app/page";
+import { getBlogs } from "@/utils/fetching";
 
-export function BlogList ({ blogs }: { readonly blogs: TestData[] }) {
+export async function BlogList (
+  // work with `basic_concept`
+  // { blogs }: { readonly blogs: TestData[] }
+) {
+  // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
+  // In a while of 2 seconds, `portfolios` data is fetched in a second.
+  const { data: blogs } = await getBlogs();
+
   const _blogs = blogs.map(({ id, title, description, coverImage }) => (
     <div key={id} className="content-item">
       <div className="content-item__image-container">

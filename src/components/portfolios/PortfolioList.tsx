@@ -1,7 +1,15 @@
 import { TestData } from '@/app/page';
+import { getPortfolios } from '@/utils/fetching';
 import Image from 'next/image';
+import portfolios from '@/contents/portfolio.json';
 
-export function PortfolioList ({ portfolios }: { readonly portfolios: TestData[] }) {
+export async function PortfolioList (
+  // work with `basic concept`
+  // { portfolios }: { readonly portfolios: TestData[] }
+) {
+  // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
+  // In a while of 2 seconds, `portfolios` data is fetched in a second.
+  const { portfolios: { data: portfolios} } = await getPortfolios();
   const _portfolios = portfolios.map(({ id, title, description, coverImage }) => (
     <div key={id} className="content-item">
       <div className="content-item__image-container">
