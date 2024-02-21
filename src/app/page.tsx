@@ -26,6 +26,18 @@ export interface TestData {
   coverImage: string;
 };
 
+/** ------- 1. Time base revalidate for static page --------- */
+
+// The second way to revalidate the static page.
+// Without the `revalidate` option in fetch function,
+// we can use `revalidate` in the component.
+// Test `yarn run build` and `yarn run start`
+// [IMPORTANT!]
+// So every interval, the server generates a **** new HTML page **** in the running time
+// and sent to the client again
+// even though the first HTML is generated in the build time.
+// export const revalidate = 2;
+
 // This page is going to be the default page for the project
 export default async function Home() {
   return (

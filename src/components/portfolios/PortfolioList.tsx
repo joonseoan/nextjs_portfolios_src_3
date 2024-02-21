@@ -1,5 +1,10 @@
 import { TestData } from '@/app/page';
-import { getPortfolios } from '@/utils/fetching';
+// [SSR] with refreshing data
+// import { getPortfolios } from '@/utils/fetching.ssr';
+// [Static] with html file. So whenever refresh the browser,
+// the same data exists
+import { getPortfolios } from "@/utils/fetching.static";
+
 import Image from 'next/image';
 import portfolios from '@/contents/portfolio.json';
 

@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { TestData } from "@/app/page";
-import { getBlogs } from "@/utils/fetching";
+// [SSR] with refreshing data
+// import { getBlogs } from "@/utils/fetching.ssr";
+
+// [Static] with html file. So whenever refresh the browser,
+// the same data exists particularly in blogs
+import { getBlogs } from "@/utils/fetching.static";
 
 export async function BlogList (
   // work with `basic_concept`

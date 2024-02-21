@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { TestData } from 'src';
+import { TestData } from './index';
 
 const NUM_COUNT = 20;
 
