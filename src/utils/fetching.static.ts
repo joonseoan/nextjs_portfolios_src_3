@@ -5,12 +5,14 @@ export async function getBlogs(): Promise<{ data: TestData[] }> {
   await delay(2000);
   // Revalidate by utilizing tag
   const res = await fetch('http://localhost:4000/api/blogs', {
-    // method: 'POST',
      /** ------- 2. Demand base revalidate --------- */
     // step 1) Add tags to fetch function
-    // step 2) Need to create a separate endpoint only for `revalidate`.
+    // step 2) Need to create a separate nextjs local endpoint only for `revalidate`.
+    //      ===> it will http://localhost:3000/api/revalidate_blogs
+    // step 3) we will compare http://localhost:4000/api/blogs (outside server) vs http://localhost:3000/api/revalidate_blogs (local server)
+
     // We can add anything in the array as string
-    // next: { tags: ['blogs'] } 
+    next: { tags: ['blogs'] } 
   });
 
   // How to make the static page have the updated data from API?
