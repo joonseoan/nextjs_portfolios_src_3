@@ -4,13 +4,13 @@ import { delay } from ".";
 export async function getBlogs(): Promise<{ data: TestData[] }> {
   await delay(2000);
   // Revalidate by utilizing tag
-  const res = await fetch('http://localhost:4000/api/revalidate_blogs', {
-    method: 'POST',
+  const res = await fetch('http://localhost:4000/api/blogs', {
+    // method: 'POST',
      /** ------- 2. Demand base revalidate --------- */
     // step 1) Add tags to fetch function
     // step 2) Need to create a separate endpoint only for `revalidate`.
     // We can add anything in the array as string
-    next: { tags: ['blogs'] } 
+    // next: { tags: ['blogs'] } 
   });
 
   // How to make the static page have the updated data from API?

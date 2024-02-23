@@ -38,6 +38,13 @@ export interface TestData {
  * and fetch's default cache { cache: defaultValue } (for static rendering)
  */
 
+/***
+ * IMPORTANT.
+ * Before we understand and test the static and server side rendering
+ * We must enable cache in the network tab of the browser.
+ * Static works only in `enable cache` setup
+ */
+
 /**
  * [Build Stage] ---> Not in the server
  * For other than this page (`/`), HTML page is created and then rendered.
@@ -127,7 +134,8 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
 }
 
 /**
- * [Testing server side rendering and static rendering]
+ * [Testing server side rendering and static rendering] ---- Important!!!!
+ * [Must enable cache in the network tab of the browser!!! particularly for static mode]
  * 1. Delete { cache: 'no-cache' } or Create { cache: 'no-cache' } again.
  * 2. Whenever delete or create { cache: 'no-cache' }, run `npm run build`.
  * 3. After finish the build, please check out if there is `server-side-rendering` mark.
