@@ -1,6 +1,38 @@
 import { TestData } from "@/app/page";
 import { delay } from ".";
 
+const data = new URLSearchParams();
+data.append('tag', 'blogs');
+data.append('secret', 'whatisgoingon');
+
+// `revalidateTag` allows us to purge cached data on-demand for a specific cache tag.
+/**
+ * Good to know:
+ *  revalidateTag is available in both Node.js and Edge runtimes.
+ * 
+ *  revalidateTag only invalidates the cache when the path is next visited. 
+ *  This means calling revalidateTag with a dynamic route segment will not
+ *  immediately trigger many revalidations at once.
+ *  The invalidation only happens when the path is next visited.
+ * 
+ */
+
+
+
+export async function getBlogsTags(): Promise<any> {
+  const res = await fetch('http://localhost:3000/api/revalidate_blogs', {
+    // method: 'POST',
+    // headers: {
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    // },
+    // body: data,
+    next: { tags: ['blogs'] },
+  });
+
+  const testData = await res.json();
+  console.log('testData: ', testData);
+}
+
 export async function getBlogs(): Promise<{ data: TestData[] }> {
   await delay(2000);
   // Revalidate by utilizing tag

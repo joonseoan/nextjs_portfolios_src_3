@@ -5,7 +5,7 @@ import { TestData } from "@/app/page";
 
 // [Static] with html file. So whenever refresh the browser,
 // the same data exists particularly in blogs
-import { getBlogs } from "@/utils/fetching.static";
+import { getBlogs, getBlogsTags } from "@/utils/fetching.static";
 
 export async function BlogList (
   // work with `basic_concept`
@@ -14,6 +14,7 @@ export async function BlogList (
   // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
   // In a while of 2 seconds, `portfolios` data is fetched in a second.
   const { data: blogs } = await getBlogs();
+  await getBlogsTags();
 
   const _blogs = blogs.map(({ id, title, description, coverImage }) => (
     <div key={id} className="content-item">
