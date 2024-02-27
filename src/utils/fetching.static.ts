@@ -46,7 +46,10 @@ export async function getBlogs(): Promise<{ data: TestData[] }> {
     //  Please use the browser console in the tab which is not in project.
     //  And refresh the browser tab which contains the project
     //  We can see the data is updated.
-    //  Therefore, tag-demand should work with Admin, etc.
+    
+    //  Hence, this static page only updates data once
+    // only after running await fetch('http://localhost:3000/api/revalidate_blogs?tag=blogs&secret=abcde', {method: 'POST'})   
+    //  Therefore, tag-demand should work with Admin role, etc.
     next: { tags: ['blogs'] },
   });
 
