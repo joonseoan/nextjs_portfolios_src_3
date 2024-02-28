@@ -42,9 +42,10 @@ export interface TestData {
 export default async function Home() {
   return (
     <>
-      <Suspense fallback={<div>Loading Blogs</div>}>
+      {/* Since it is a client fetching, we do not need to use Suspense */}
+      {/* <Suspense fallback={<div>Loading Blogs</div>}> */}
         <BlogList />
-      </Suspense>
+      {/* </Suspense> */}
       <Suspense fallback={<div>Loading Portfolios</div>}>
         <PortfolioList />
       </Suspense>
