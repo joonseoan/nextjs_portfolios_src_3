@@ -76,7 +76,7 @@ export async function getPortfolios(): Promise<{ portfolios: { data: TestData[] 
   await delay(1000);
   const random = Math.random()
 
-  const res = await fetch('http://localhost:4000/api/portfolios');
+  const res = await fetch('http://localhost:4000/api/portfolios', {cache: 'no-cache'});
 
   if (!res.ok) {
     throw new Error('Unable to get Portfolios');

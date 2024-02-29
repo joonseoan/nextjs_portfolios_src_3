@@ -3,16 +3,24 @@ import blogs from '@/contents/blogs.json';
 import { delay } from "@/utils";
 
 // 2) Using the outside server
+// We can call this in `use client` by using `useEffect`
+// to avoid the CORS issue in the server.
+
+// [IMPORTANT] As long as we use the client side fetching
+// it is a static page even though we use `no-cache` in yarn run build and yarn run start 
+// BTW, do not use `no-cache` yarn run dev. it updates the data. ---> It can confuse us.
+// FYI, we can't use revalidate?  
 export async function GET() {
+  // [IMPORTANT!]
+  // Like fetching in server side, it can be static and  
   const res = await fetch('http://localhost:4000/api/blogs');
   
     if (!res.ok) {
-      return Response.json({ message: "Fetched Failed" }, { status: 400 });
+      return NextResponse.json({ message: "Fetched Failed" }, { status: 400 });
     }
   
-    return Response.json(await res.json());
+    return NextResponse.json(await res.json());
 }
-
 
 // 1) Using json file
 // export async function GET() {

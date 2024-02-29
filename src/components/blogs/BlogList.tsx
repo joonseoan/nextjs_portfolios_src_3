@@ -36,14 +36,19 @@ export function BlogList (
    *
   */
   const [blogs, setBlogs] = useState<undefined | TestData[]>();
-  
+  // ----------------- Client Side Fetching -----------------------
+  // [IMPORTANT]
+  // Client Side Fetching by using local api.
+  // It is always static page. (We can't setup no-cache in the local api) (Test with yarn run build and yarn run start)
   useEffect(() => {
     async function _getBlogs() {
       // Tomorrow === > API FETCH return typescript
       // Using local server. (Don't specify CORS in outside server)
+
+      // TODO: We need a test using `fetching.ssr.ts`
+      // to verify it supports dynamic data when we use client side fetching
       const response = await fetch('/api/blogs');
       const { data } = await response.json();
-
       setBlogs(data);
     }
 
