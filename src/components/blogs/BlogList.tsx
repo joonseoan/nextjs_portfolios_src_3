@@ -9,6 +9,8 @@ import { TestData } from "@/app/page";
 // [Static] with html file. So whenever refresh the browser,
 // the same data exists particularly in blogs
 import { getBlogs } from "@/utils/fetching.static";
+
+// [Client Side Fetching]
 import { useEffect, useState } from "react";
 
 // [IMPORTANT]
@@ -20,7 +22,7 @@ export function BlogList (
   // work with `basic_concept`
   // { blogs }: { readonly blogs: TestData[] }
 ) {
-  // ------------ [It works only with clients]!!!! -------
+
   /**
    * Client fetching
    * In the static page, what if we would like to fetch our data on the client?
@@ -40,14 +42,38 @@ export function BlogList (
   // [IMPORTANT]
   // Client Side Fetching by using local api.
   // It is always static page. (We can't setup no-cache in the local api) (Test with yarn run build and yarn run start)
+
+  /**
+   * [From Filip]
+   * When you're using client-side fetching in Next.js with React's useEffect, 
+   * the page is still considered a "static" page. However, the data fetched during client-side
+   * rendering is indeed cached by the browser.
+   * 
+   * To ensure you're getting the latest data from the server, especially 
+   * if it's dynamic and frequently updated, server-side rendering (SSR) or 
+   * incremental static regeneration (ISR) are preferred methods in Next.js.
+   * These approaches allow you to fetch fresh data on each request or 
+   * at specified intervals,respectively.
+   * 
+   * If you're using client-side fetching on a static page and want to refresh
+   * the data periodically, you can indeed use the revalidate option in Next.js.
+   * This allows you to specify how often (in seconds) the page should be revalidated
+   * and regenerated in the background.
+   */
   useEffect(() => {
     async function _getBlogs() {
       // Tomorrow === > API FETCH return typescript
-      // Using local server. (Don't specify CORS in outside server)
 
-      // TODO: We need a test using `fetching.ssr.ts`
-      // to verify it supports dynamic data when we use client side fetching
+      // Static
       const response = await fetch('/api/blogs');
+
+      // Static (But we must not call this if we want to make this page work as static)
+      // because it is still static but the data is refreshed which means it is not manageable.
+      // const response = await fetch('http://localhost:4000/api/blogs');
+
+      // Dynamic (SSR)
+      // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
+      // In that case, we do not need to use `useEffect`
       const { data } = await response.json();
       setBlogs(data);
     }

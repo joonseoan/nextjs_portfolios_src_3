@@ -5,6 +5,7 @@ import path from 'path';
 import blogs from './contents/blogs.json';
 import portfolios from './contents/portfolios.json';
 import { randomize } from './randomizer';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -17,11 +18,14 @@ export interface TestData {
 };
 
 const app = express();
+
 const port = process.env.PORT;
 const pathToContent = path.join(__dirname, 'contents');
 const blogsPath = path.join(pathToContent, 'blogs.json');
 const portfoliosPath = path.join(pathToContent, 'portfolios.json');
-setInterval(randomize, 3000);
+setInterval(randomize, 2000);
+
+app.use(cors());
 
 app.get('/api/blogs/', (req, res) => {
   // Actually, we can use `import blogs from './contents/blogs.json';` directly
