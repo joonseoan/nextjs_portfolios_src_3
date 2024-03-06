@@ -61,11 +61,15 @@ export function BlogList (
    * and regenerated in the background.
    */
   useEffect(() => {
-    async function _getBlogs() {
+    async function _getBlogs<T>() {
       // Tomorrow === > API FETCH return typescript
-
+      
       // Static
       const response = await fetch('/api/blogs');
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
 
       // Static (But we must not call this if we want to make this page work as static)
       // because it is still static but the data is refreshed which means it is not manageable.
@@ -74,11 +78,16 @@ export function BlogList (
       // Dynamic (SSR)
       // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
       // In that case, we do not need to use `useEffect`
-      const { data } = await response.json();
-      setBlogs(data);
+      // const { data } = await response.json() as Promise<{ data: TestData[] }>;
+
+      // study  fetch typescript and generic
+
+      // if (blogs.data) 
+      // // console.log('test: ', test)
+      // setBlogs(blogs.data);
     }
 
-    _getBlogs();
+    _getBlogs<{data: TestData[] }>();
   }, []);
   
   // ------------ [It works with server for static and SSR page]!!!! -------

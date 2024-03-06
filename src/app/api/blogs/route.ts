@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import blogs from '@/contents/blogs.json';
 import { delay } from "@/utils";
+import { TestData } from "@/app/page";
 
 // 2) Using the outside server
 // We can call this in `use client` by using `useEffect`
@@ -10,7 +11,7 @@ import { delay } from "@/utils";
 // it is a static page even though we use `no-cache` in yarn run build and yarn run start 
 // BTW, do not use `no-cache` yarn run dev. it updates the data. ---> It can confuse us.
 // FYI, we can't use revalidate?  
-export async function GET() {
+export async function GET(): Promise<NextResponse<{ message: string} | { data: TestData }>> {
   // [IMPORTANT!]
   // Like fetching in server side, it can be static and  
   const res = await fetch('http://localhost:4000/api/blogs');
