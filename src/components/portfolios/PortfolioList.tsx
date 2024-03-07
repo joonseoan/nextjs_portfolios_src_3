@@ -48,8 +48,10 @@ export function PortfolioList (
     async function _getPortfolios() {
       // Change it to using json file in local api like the one lecture.
       // API FETCH return typescript
+      // Generic
       // Review
       // Client Side ...review
+
 
       // Static
       const response = await fetch('/api/portfolios');

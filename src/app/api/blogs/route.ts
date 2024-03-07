@@ -11,16 +11,16 @@ import { TestData } from "@/app/page";
 // it is a static page even though we use `no-cache` in yarn run build and yarn run start 
 // BTW, do not use `no-cache` yarn run dev. it updates the data. ---> It can confuse us.
 // FYI, we can't use revalidate?  
-export async function GET(): Promise<NextResponse<{ message: string} | { data: TestData }>> {
+export async function GET() {
   // [IMPORTANT!]
-  // Like fetching in server side, it can be static and  
+  // Like fetching in server side, it can be static and
   const res = await fetch('http://localhost:4000/api/blogs');
   
-    if (!res.ok) {
-      return NextResponse.json({ message: "Fetched Failed" }, { status: 400 });
-    }
-  
-    return NextResponse.json(await res.json());
+  if (!res.ok) {
+    return NextResponse.json({ message: "Fetched Failed" }, { status: 400 });
+  }
+
+  return NextResponse.json(await res.json() as { data: TestData } );
 }
 
 // 1) Using json file

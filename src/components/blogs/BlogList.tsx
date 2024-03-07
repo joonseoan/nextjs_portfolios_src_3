@@ -37,7 +37,7 @@ export function BlogList (
    * 2) We can't use async function for this component
    *
   */
-  const [blogs, setBlogs] = useState<undefined | TestData[]>();
+  const [blogs, setBlogs] = useState<TestData[]>([]);
   // ----------------- Client Side Fetching -----------------------
   // [IMPORTANT]
   // Client Side Fetching by using local api.
@@ -61,8 +61,10 @@ export function BlogList (
    * and regenerated in the background.
    */
   useEffect(() => {
-    async function _getBlogs<T>() {
+    async function _getBlogs() {
       // Tomorrow === > API FETCH return typescript
+      // try catch
+      // generic
       
       // Static
       const response = await fetch('/api/blogs');
@@ -78,17 +80,25 @@ export function BlogList (
       // Dynamic (SSR)
       // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
       // In that case, we do not need to use `useEffect`
-      // const { data } = await response.json() as Promise<{ data: TestData[] }>;
+      
+      const { data } = (await response.json()) as { data: TestData[] };
 
-      // study  fetch typescript and generic
-
-      // if (blogs.data) 
-      // // console.log('test: ', test)
-      // setBlogs(blogs.data);
+      setBlogs(data);
     }
 
-    _getBlogs<{data: TestData[] }>();
+    _getBlogs();
+    
   }, []);
+
+  // [Testing Generic] // Why generic is not working in promise and async
+  function timeout<T>(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function sleep(fn: Function, ...args: any) {
+    await timeout<number>(3000);
+    return fn(...args);
+  }
   
   // ------------ [It works with server for static and SSR page]!!!! -------
   // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
