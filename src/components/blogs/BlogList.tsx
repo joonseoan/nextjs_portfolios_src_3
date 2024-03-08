@@ -12,6 +12,7 @@ import { getBlogs } from "@/utils/fetching.static";
 
 // [Client Side Fetching]
 import { useEffect, useState } from "react";
+import { metadata } from '../../app/layout';
 
 // [IMPORTANT]
 // 2) Client side data fetching
@@ -61,44 +62,32 @@ export function BlogList (
    * and regenerated in the background.
    */
   useEffect(() => {
-    async function _getBlogs() {
-      // Tomorrow === > API FETCH return typescript
-      // try catch
-      // generic
-      
+    async function _getBlogs() { 
       // Static
-      const response = await fetch('/api/blogs');
-
-      if (!response.ok) {
-        throw new Error(response.statusText);
+      try {
+        const response = await fetch('/api/blogs');
+  
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        // Static (But we must not call this if we want to make this page work as static)
+        // because it is still static but the data is refreshed which means it is not manageable.
+        // const response = await fetch('http://localhost:4000/api/blogs');
+  
+        // Dynamic (SSR)
+        // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
+        // In that case, we do not need to use `useEffect`
+        const { data } = (await response.json()) as { data: TestData[] };
+  
+        setBlogs(data);
+      } catch (err) {
+        throw new Error((err as Error).message);
       }
-
-      // Static (But we must not call this if we want to make this page work as static)
-      // because it is still static but the data is refreshed which means it is not manageable.
-      // const response = await fetch('http://localhost:4000/api/blogs');
-
-      // Dynamic (SSR)
-      // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
-      // In that case, we do not need to use `useEffect`
-      
-      const { data } = (await response.json()) as { data: TestData[] };
-
-      setBlogs(data);
     }
 
     _getBlogs();
     
   }, []);
-
-  // [Testing Generic] // Why generic is not working in promise and async
-  function timeout<T>(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function sleep(fn: Function, ...args: any) {
-    await timeout<number>(3000);
-    return fn(...args);
-  }
   
   // ------------ [It works with server for static and SSR page]!!!! -------
   // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)

@@ -15,6 +15,8 @@
 
 import { BlogList } from "@/components/blogs/BlogList";
 import { PortfolioList } from "@/components/portfolios/PortfolioList";
+import { BlogList as BlogList2 } from "@/components/blogs/BlogList2";
+import { PortfolioList as PortfolioList2 } from "@/components/portfolios/PortfolioList2";
 import { delay } from "@/utils";
 import { Suspense } from "react";
 
@@ -43,12 +45,13 @@ export default async function Home() {
   return (
     <>
       {/* Since it is a client fetching, we do not need to use Suspense */}
-      {/* <Suspense fallback={<div>Loading Blogs</div>}> */}
-        <BlogList />
+      {/* <Suspense fallback={<div>Loading Blogs</div>}> */} 
+      {/* Using local json */}
+      <BlogList2 />
       {/* </Suspense> */}
-      <Suspense fallback={<div>Loading Portfolios</div>}>
-        <PortfolioList />
-      </Suspense>
+      {/* <Suspense fallback={<div>Loading Portfolios</div>}> */}
+      <PortfolioList2 />
+      {/* </Suspense> */}
     </>
   );
 }

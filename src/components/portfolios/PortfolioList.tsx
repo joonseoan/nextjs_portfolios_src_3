@@ -46,12 +46,8 @@ export function PortfolioList (
    */
   useEffect(() => {
     async function _getPortfolios() {
-      // Change it to using json file in local api like the one lecture.
-      // API FETCH return typescript
-      // Generic
-      // Review
-      // Client Side ...review
-
+      // TODO: Review
+      // TODO: Client Side ...review
 
       // Static
       const response = await fetch('/api/portfolios');
