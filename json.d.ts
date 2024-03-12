@@ -11,7 +11,7 @@ declare module "portfolios" {
 }
 
 // [IMPORTANT]
-// Also, we can use this one if we want don't want to specify types for each element.
+// Also, we can use this one if we don't want to specify types for each element.
 // declare module "*.json" {
 //   const value: any;
 //   export default value;

@@ -28,11 +28,11 @@
       (So in this case, the server provides the content in HTML)
 
       The advantage of Server side rendering is:
-      we can call easily BE database because the javascript with works when it is placed in the server.
+      we can call easily BE database because the javascript works when it is placed in the server.
       So that we can easily renders HTML manipulated in the server side.
 
       Also when we call the database in the server, it will not be leaked into the client code
-      but into the browser code
+      but into the browser code : ??
       
     
     - Client Side rendering
