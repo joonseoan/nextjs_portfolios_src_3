@@ -42,16 +42,29 @@ export interface TestData {
 
 // This page is going to be the default page for the project
 export default async function Home() {
+  // return (
+  //   <>
+  //     {/* Since it is a client fetching, we do not need to use Suspense */}
+  //     {/* <Suspense fallback={<div>Loading Blogs</div>}>  */}
+  //     {/* Using local json */}
+  //     <BlogList2 />
+  //     {/* </Suspense> */}
+  //     {/* <Suspense fallback={<div>Loading Portfolios</div>}> */}
+  //     <PortfolioList2 />
+  //     {/* </Suspense> */}
+  //   </>
+  // );
+
+  // 2)
+  // [Revalidation]
   return (
     <>
-      {/* Since it is a client fetching, we do not need to use Suspense */}
-      {/* <Suspense fallback={<div>Loading Blogs</div>}> */} 
-      {/* Using local json */}
-      <BlogList2 />
-      {/* </Suspense> */}
-      {/* <Suspense fallback={<div>Loading Portfolios</div>}> */}
-      <PortfolioList2 />
-      {/* </Suspense> */}
+      <Suspense fallback={<div>Loading Blogs</div>}> 
+        <BlogList />
+      </Suspense>
+      <Suspense fallback={<div>Loading Portfolios</div>}>
+        <PortfolioList />
+      </Suspense>
     </>
   );
 }

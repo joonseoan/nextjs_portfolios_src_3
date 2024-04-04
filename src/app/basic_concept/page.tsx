@@ -41,19 +41,18 @@ export interface TestData {
 /***
  * IMPORTANT.
  * Before we understand and test the static and server side rendering
- * We must enable cache in the network tab of the browser.
+ * We must enable cache in the network tab of the chrome browser.
  * Static works only in `enable cache` setup
  */
 
 /**
  * [Build Stage] ---> Not in the server
- * For other than this page (`/`), HTML page is created and then rendered.
+ * For the pages other than this page (`/`), HTML page is created and then rendered.
+ * For `Blogs` and `Portfolio` page, it just generates HTML.
  * 
  * However, for this page (`/` in Server Side Rendering), we will not render any HTML document.
  * We will create a Javascript file. The handler functions fetching data and rendering the page
  * will generate HTML document with Virtual DOM when it requested. (Slower but it can get the refreshed data)
- * 
- * For `Blogs` and `Portfolio` page, it just generates HTML.
  * 
  * [Running Stage]
  * The browser requests `/blogs` in the server. In that server, Javascript function (router)
@@ -72,12 +71,11 @@ export interface TestData {
 /**  
   [IMPORTANT!!!!!]
   Even though the function `GET` function in the server has 1 or 2 second delay (settimeout),
-  the client does not have the delay for getting the data.
-  This is happening because API folder and this `page` are in the same localhost:3000
-  and { cache: defaultValue } in `fetch` cached the data in the browser. 
+  the client does not have the delay for getting the data. This is happening because 
+   - { cache: defaultValue } in `fetch` cached the data in the browser. 
   Then this HTML created by Virtual DOM is getting pre-rendered on the server in the build time.
 
-  Add console.log in `getBlogs()` function and `yarn run build`
+  Add console.log in `getBlogs()` function and `yarn run build`.
   Then we can see the fetching data happens in the build time.
   and then `cached` in the browser. 
   
@@ -91,41 +89,38 @@ export interface TestData {
 async function getBlogs(): Promise<{ data: TestData[] }> {
   await delay(2000);
   console.log('Fetching Blogs')
+  
+  // [IMPORTANT] 
+  // For both static and ssr, the call of `fetch` api function does not happen in the browser.
 
-  // [SSR]
+  // 1) [SSR]
   // Since setting up the separate backend, it works in the build time.
   const res = await fetch('http://localhost:4000/api/blogs', { cache: 'no-cache' });
-  // It does not work at build time.
+  // It does not work at build time. Instead, it works in the `server` in the running time.
   // const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
   
-  // [Static]
-  // Both are working as a static which means,
-  // the data fetched in `yarn run dev` of development mode are cached in the browser.
-  // Therefore, the call of `fetch` api function does not happen in the app api.
-  // In result no error in build time once thd data is fetched in the development mode.
+  // 2) [Static].
+  // It works in the build time, not running time.
   // const res = await fetch('http://localhost:4000/api/blogs');
   // const res = await fetch('http://localhost:3000/api/blogs');
 
   /**
    * [IMPORTANT!!!]
-   * With { cache: defaultValue }, As mentioned above, the data is cached in the browser. 
-   * Therefore, there is no error in build time because the API function does not send the data.
-   * (The function is called BTW). It uses the data cached in the browser. And then
+   * With { cache: defaultValue }, As mentioned above, the data is fetched in build time.
+   * The the data is cached in the browser. And then
    * it prepares HTML in the build time. Therefore it is `Static rendering` that HTML is prepared.
    * However, it can't refresh the data.
    * 
    * On the other hand, with { cache: 'no-cache' }, it works in a way of a `server side rendering`.
    * The page works like with `getServerSideProps`.
    * In this case, it does not work and generate an error in the build! 
-   * if we use the local server in the same port because it tries to fetch data in build time.
-   * So the BE server must be outside this app with {cache: 'no-cache' }
    * 
    * BTW, however it works in the running time stage because BE server is running . So we can find 
    * the delay to fetch the data in the running time.
    */
 
   // const res = await fetch('http://localhost:3000/api/blogs', { cache: 'no-cache' });
-  // console.log('Getting Blogs')
+  console.log('Getting Blogs')
   if (!res.ok) {
     throw new Error('Unable to get blogs');
   }
@@ -207,7 +202,7 @@ export default async function Home() {
 // [IMPORTANT]
 // We need to specify that this page will be used in the client side rendering.
 // Then, we can use React.
-// This tag must be the most parent component.
+// This tag must be the most parent component of the client side rendering.
 // "use client" // it creates a `page.js` request in browser's network tab 
 
 // import { useEffect } from "react"
