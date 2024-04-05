@@ -18,7 +18,7 @@ import portfolios from '@/contents/portfolio.json';
 // 2) Client side data fetching
 export function PortfolioList (
 
-// 1) only server side and static page
+// 1) only server side and static page (Serial Fetching)
 // export async function PortfolioList (
   // work with `basic concept`
   // { portfolios }: { readonly portfolios: TestData[] }

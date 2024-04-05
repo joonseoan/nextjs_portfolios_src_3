@@ -1,4 +1,4 @@
-'use client'
+'use client' // The most parent component
 
 import Image from "next/image";
 import { TestData } from "@/app/page";
@@ -18,7 +18,9 @@ import { metadata } from '../../app/layout';
 // 2) Client side data fetching
 export function BlogList (
 
-// 1) Only for server side and static page
+// 1) Only for server side and static page (Serial Fetching)
+// [IMPORTANT]
+// Please make sure we can use `async` in the functional component
 // export async function BlogList (
   // work with `basic_concept`
   // { blogs }: { readonly blogs: TestData[] }
@@ -35,7 +37,7 @@ export function BlogList (
    * html.
    * 
    * 1) As long as we use React hooks, we must specify `use client` up and above
-   * 2) We can't use async function for this component
+   * 2) We can't use 'async' function for this component
    *
   */
   const [blogs, setBlogs] = useState<TestData[]>([]);
@@ -92,7 +94,7 @@ export function BlogList (
   // ------------ [It works with server for static and SSR page]!!!! -------
   // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
   // In a while of 2 seconds, `portfolios` data is fetched in a second.
-  // const { data: blogs } = await getBlogs();
+  // const { data: blogs } = await getBlogs(); # getBlogs from static and ssr fetching.
 
   if (!blogs) {
     return <div>Loading....</div>;
@@ -106,7 +108,7 @@ export function BlogList (
           src={coverImage}
           alt={id}
           // [IMPORTANT]
-          // 2) If we would like ti fill up the given size in the parent,
+          // 2) If we would like to fill up the given size in the parent,
           fill={true}
           sizes="(max-width: 768px) 100vw, 33vw"
           

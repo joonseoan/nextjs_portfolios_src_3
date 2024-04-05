@@ -92,6 +92,7 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
   
   // [IMPORTANT] 
   // For both static and ssr, the call of `fetch` api function does not happen in the browser.
+  // For instance, we can't find fetch in the network tab of the browser.
 
   // 1) [SSR]
   // Since setting up the separate backend, it works in the build time.
@@ -112,7 +113,7 @@ async function getBlogs(): Promise<{ data: TestData[] }> {
    * However, it can't refresh the data.
    * 
    * On the other hand, with { cache: 'no-cache' }, it works in a way of a `server side rendering`.
-   * The page works like with `getServerSideProps`.
+   * The page works like the one with `getServerSideProps`.
    * In this case, it does not work and generate an error in the build! 
    * 
    * BTW, however it works in the running time stage because BE server is running . So we can find 
