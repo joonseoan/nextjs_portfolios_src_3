@@ -1,14 +1,18 @@
-'use client'
+// [IMPORTANT]
+// must not use for SSR and static
+// 'use client'
 
 import Image from "next/image";
 import { TestData } from "@/app/page";
 import { getBlogs } from "@/utils/fetching.static";
 import { getBlogs as getBlogs2 } from "@/utils/fetching.json.content";
-import { useEffect, useState } from "react";
-import { metadata } from '../../app/layout';
 
-export function BlogList () {
-  const blogs = getBlogs2<TestData[]>();
+export async function BlogList () {
+  // [Static]
+  const { data: blogs } = await getBlogs<{ data: TestData[] }>();
+  
+  // using json
+  // const blogs = getBlogs2<TestData[]>();
 
   const _blogs = blogs.map(({ id, title, description, coverImage }) => (
     <div key={id} className="content-item">

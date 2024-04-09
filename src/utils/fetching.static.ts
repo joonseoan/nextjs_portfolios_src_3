@@ -1,7 +1,7 @@
 import { TestData } from "@/app/page";
 import { delay } from ".";
 
-export async function getBlogs(): Promise<{ data: TestData[] }> {
+export async function getBlogs<T extends { data: TestData[] }>(): Promise<T> {
   await delay(2000);
   // Revalidate by utilizing tag
   const res = await fetch('http://localhost:4000/api/blogs', {
@@ -11,7 +11,7 @@ export async function getBlogs(): Promise<{ data: TestData[] }> {
   // (delete `next` folder before `yarn run build`)
   // const res = await fetch('http://localhost:4000/api/blogs', {
     
-    // [IMPORTANT]
+    // [IMPORTANT][FYI]
     // The SSR and Revalidate do not work together!!!
     // cache: 'no-cache', next: { revalidate: 2 }
 
@@ -22,7 +22,7 @@ export async function getBlogs(): Promise<{ data: TestData[] }> {
 
     // 1) we use revalidate in fetch function.
     // BTW we do not need to build local API like in `Tag and Path` revalidation
-    // next: { revalidate: 2 /** second */ }
+    next: { revalidate: 2 /** second */ }
 
     /** ------- 2. Tag base revalidate --------- */
     // 1) Register any tags here for the fetch.
@@ -72,15 +72,17 @@ export async function getBlogs(): Promise<{ data: TestData[] }> {
   return res.json();
 }
 
-export async function getPortfolios(): Promise<{ portfolios: { data: TestData[] }, random: number }> {
+export async function getPortfolios<T extends { portfolios: { data: TestData[] }, random: number }>(): Promise<T> {
   await delay(1000);
   const random = Math.random()
 
-  const res = await fetch('http://localhost:4000/api/portfolios', {cache: 'no-cache'});
+  const res = await fetch('http://localhost:4000/api/portfolios', {
+    // next: { revalidate: 2 }
+  });
 
   if (!res.ok) {
     throw new Error('Unable to get Portfolios');
   }
 
-  return { portfolios: await res.json(), random };
+  return ({ portfolios: await res.json(), random }) as T;
 }

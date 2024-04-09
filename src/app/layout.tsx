@@ -16,7 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <body className={inter.className}>{children}</body> */}
-      <body>
+      {/* to avoid warning from grammarly  */}
+      <body suppressHydrationWarning={true}>
         <div className="page-container">
           {children}
         </div>

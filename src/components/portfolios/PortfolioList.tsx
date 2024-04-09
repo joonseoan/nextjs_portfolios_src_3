@@ -17,7 +17,6 @@ import portfolios from '@/contents/portfolio.json';
 // [IMPORTANT]
 // 2) Client side data fetching
 export function PortfolioList (
-
 // 1) only server side and static page (Serial Fetching)
 // export async function PortfolioList (
   // work with `basic concept`
@@ -30,8 +29,11 @@ export function PortfolioList (
   /**
    * [From Filip]
    * When you're using client-side fetching in Next.js with React's useEffect, 
-   * the page is still considered a "static" page. However, the data fetched during client-side
+   * the page is still considered a **** "static" page *****. However, the data fetched during client-side
    * rendering is indeed cached by the browser.
+   * 
+   * 1) As long as we use any **** React hooks ****, we must specify `use client` up and above
+   * 2) We can't use  *******'async' function ******** for this component
    * 
    * To ensure you're getting the latest data from the server, especially 
    * if it's dynamic and frequently updated, server-side rendering (SSR) or 
@@ -46,21 +48,19 @@ export function PortfolioList (
    */
   useEffect(() => {
     async function _getPortfolios() {
-      // TODO: Review
-      // TODO: Client Side ...review
-
-      // Static
-      const response = await fetch('/api/portfolios');
-      
-      // Static
-      // Static (But we must not call this if we want to make this page work as static)
-      // because it is still static but the data is refreshed which means it is not manageable.
-      // const response = await fetch('http://localhost:4000/api/portfolios');
-
       // Dynamic (SSR)
       // if we want to implement dynamic refreshed data, we should implement SSR as mentioned above.
       // In that case, we do not need to use `useEffect`
+      
+      // [Static]
+      // Use this one
+      const response = await fetch('/api/portfolios');
 
+      // Do not use this one
+      // Static (But we must not call this if we want to make this page work as static)
+      // because it is still static but the data is refreshed which means it is ***** not manageable ******.
+      // const response = await fetch('http://localhost:4000/api/portfolios');
+      
       const { data } = await response.json();
       setPortfolios(data);
     }
@@ -68,15 +68,17 @@ export function PortfolioList (
     _getPortfolios();
   }, []);
 
-  if (!portfolios) {
-    return <div>Loading...</div>
-  }
-
   // 1)
-  // ------------ [It works with server for static and SSR page]!!!! -------
+  // ------------ [It works with server for static and SSR page]!!!! -----------
+  // [IMPORTANT]
+  // ***** if we use server side rendering and static, we must remove `use-client`.!!!!! *****
   // It is a parallel fetching now. (It takes 2 seconds to fetch blog and portfolio data)
   // In a while of 2 seconds, `portfolios` data is fetched in a second.
   // const { portfolios: { data: portfolios} } = await getPortfolios();
+
+  if (!portfolios) {
+    return <div>Loading...</div>
+  }
   
   const _portfolios = portfolios.map(({ id, title, description, coverImage }) => (
     <div key={id} className="content-item">

@@ -40,30 +40,31 @@ export interface TestData {
 // even though the first HTML is generated in the build time.
 // export const revalidate = 2;
 
-// This page is going to be the default page for the project
 export default async function Home() {
+  // [Client-side-rendering vs Server-side-rendering]
   // return (
   //   <>
-  //     {/* Since it is a client fetching, we do not need to use Suspense */}
+  //     {/* [IMPORTANT] Since it is a client side fetching, we do not need to use Suspense */}
   //     {/* <Suspense fallback={<div>Loading Blogs</div>}>  */}
   //     {/* Using local json */}
-  //     <BlogList2 />
+  //       <BlogList />
   //     {/* </Suspense> */}
   //     {/* <Suspense fallback={<div>Loading Portfolios</div>}> */}
-  //     <PortfolioList2 />
+  //       <PortfolioList />
   //     {/* </Suspense> */}
   //   </>
   // );
 
   // 2)
-  // [Revalidation]
+  // [Static]
+  // [if Static-Revalidation]
   return (
     <>
       <Suspense fallback={<div>Loading Blogs</div>}> 
-        <BlogList />
+        <BlogList2 />
       </Suspense>
       <Suspense fallback={<div>Loading Portfolios</div>}>
-        <PortfolioList />
+        <PortfolioList2 />
       </Suspense>
     </>
   );
