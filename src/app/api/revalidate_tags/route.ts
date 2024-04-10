@@ -15,7 +15,7 @@ import { revalidateTag } from "next/cache";
  
 export async function POST(request: NextRequest) {
   // [IMPORTANT]
-  // The way to get params in nextjs
+  // The way to get query in nextjs
   // http://localhost:3000/api/revalidate_tags?tag=blogs&secret=abcde
   const tag = request.nextUrl.searchParams.get('tag');
   console.log('tag: ', tag)
