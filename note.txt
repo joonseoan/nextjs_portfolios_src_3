@@ -49,3 +49,11 @@
   api/portfolios/route.ts
   In the browser, localhost:3000/api/blogs or localhost:3000/api/portfolios 
   ****** Do not use localhost:3000/api/blogs/route
+
+- Markdown content
+  . url: https://github.com/Jerga99/next-app-router/blob/main/src/content/blogs/markdown-full-example.md
+  . Create a file xxxx.md like /contents/blogs or /contents/portfolio
+  . Visit the url above and find the .md files in blogs and portfolios
+  . In github, we can find "Raw" button to see the markdown code.
+  . Copy all and paste it to each file.
+
