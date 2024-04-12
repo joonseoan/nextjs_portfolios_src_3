@@ -19,6 +19,8 @@ import { BlogList as BlogList2 } from "@/components/blogs/BlogList2";
 import { PortfolioList as PortfolioList2 } from "@/components/portfolios/PortfolioList2";
 import { BlogList as BlogList3 } from "@/components/blogs/BlogList3";
 import { PortfolioList as PortfolioList3 } from '@/components/portfolios/PortfolioList3';
+import { BlogList as BlogList4 } from "@/components/blogs/BlogList4";
+import { PortfolioList as PortfolioList4 } from "@/components/portfolios/PortfolioList4";
 import { delay } from "@/utils";
 import { Suspense } from "react";
 
@@ -74,13 +76,24 @@ export default async function Home() {
   // 3)
   // [Static]
   // Fetching Json
+  // return (
+  //   <>
+  //     <Suspense fallback={<div>Loading Blogs</div>}> 
+  //       <BlogList3 />
+  //     </Suspense>
+  //     <Suspense fallback={<div>Loading Portfolios</div>}>
+  //       <PortfolioList3 />
+  //     </Suspense>
+  //   </>
+  // );
+  // [MarkDown]
   return (
     <>
       <Suspense fallback={<div>Loading Blogs</div>}> 
-        <BlogList3 />
+        <BlogList4 />
       </Suspense>
       <Suspense fallback={<div>Loading Portfolios</div>}>
-        <PortfolioList3 />
+        <PortfolioList4 />
       </Suspense>
     </>
   );

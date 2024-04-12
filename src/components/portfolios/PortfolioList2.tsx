@@ -5,7 +5,6 @@
 import Image from 'next/image';
 import { TestData } from '@/app/page';
 import { getPortfolios } from "@/utils/fetching.static";
-import { getPortfolios as getPortfolios2 } from '@/utils/fetching.json.content';
 
 export async function PortfolioList () {
   const { portfolios: { data: portfolios } } = await getPortfolios<
