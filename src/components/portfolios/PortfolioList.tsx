@@ -12,7 +12,7 @@ import { getPortfolios } from "@/utils/fetching.static";
 import { useState, useEffect } from 'react';
 
 import Image from 'next/image';
-import portfolios from '@/contents/portfolio.json';
+import portfolios from '@/content/portfolio.json';
 
 // [IMPORTANT]
 // 2) Client side data fetching

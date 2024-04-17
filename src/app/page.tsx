@@ -86,15 +86,16 @@ export default async function Home() {
   //     </Suspense>
   //   </>
   // );
+
   // [MarkDown]
   return (
     <>
-      <Suspense fallback={<div>Loading Blogs</div>}> 
-        <BlogList4 />
-      </Suspense>
-      <Suspense fallback={<div>Loading Portfolios</div>}>
-        <PortfolioList4 />
-      </Suspense>
+      {/* <Suspense fallback={<div>Loading Blogs</div>}>  */}
+      <BlogList4 />
+      {/* </Suspense> */}
+      {/* <Suspense fallback={<div>Loading Portfolios</div>}> */}
+      <PortfolioList4 />
+      {/* </Suspense> */}
     </>
   );
 }

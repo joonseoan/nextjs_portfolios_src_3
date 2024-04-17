@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import blogs from '@/contents/blogs.json';
+import blogs from '@/content/blogs.json';
 import { delay } from "@/utils";
 import { TestData } from "@/app/page";
 

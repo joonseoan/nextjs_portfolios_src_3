@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import portfolios from '@/contents/portfolio.json';
+import portfolios from '@/content/portfolio.json';
 import { delay } from "@/utils";
 
 // [IMPORTANT] As long as we use the client side fetching

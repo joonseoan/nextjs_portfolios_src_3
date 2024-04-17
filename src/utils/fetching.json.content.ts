@@ -1,6 +1,6 @@
 import { TestData } from "@/app/page";
-import blogs from '@/contents/blogs.json';
-import portfolios from '@/contents/portfolio.json';
+import blogs from '@/content/blogs.json';
+import portfolios from '@/content/portfolio.json';
 
 export function getBlogs<T extends TestData[]>(): T {
   return blogs as T;
