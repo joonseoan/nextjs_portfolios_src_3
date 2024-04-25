@@ -1,9 +1,3 @@
-<!-- 
-  [Meta Data]
-  It is a object. In markdown content,
-  ---   --- is equivalent with {} in javascript
-
- -->
 ---
 title: "Markdown Extensive Example"
 description: Learn how to write markdown
