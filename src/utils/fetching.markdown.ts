@@ -15,6 +15,8 @@ export function getBlogs() {
     const fileContent = fs.readFileSync(filePath, 'utf8')
     // object
     const content = matter(fileContent);
+    content.data.path = name.split('.')[0];
+    
     // console.log(JSON.stringify(content));
     // `matter` converts string to object!
     // { content: "", data: {title:"", description: "", ...}, isEmpty: boolean, excerpt: ""}
@@ -41,6 +43,9 @@ export function getBlogs() {
 export function getPortfolios() {
   return fs.readdirSync(portfoliosMarkdownDir).map((name) => {
     const filePath = path.join(portfoliosMarkdownDir, name);
-    return matter(fs.readFileSync(filePath, 'utf8'));
+    const content = matter(fs.readFileSync(filePath, 'utf8'));
+    content.data.path = name.split('.')[0];
+    
+    return content;
   });
 }

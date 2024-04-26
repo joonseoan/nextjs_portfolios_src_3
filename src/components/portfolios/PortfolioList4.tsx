@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import { TestData } from '@/app/page';
 import { getPortfolios } from '@/utils/fetching.markdown';
+import Link from 'next/link';
 
 export function PortfolioList () {
   const portfolios = getPortfolios();
   
   const portfoliosMarkdown = portfolios.map(({ data, content }) => {
-    const { title, description, coverImage, id } = data;
-    return <div key={id} className="content-item">
+    const { title, description, coverImage, id, path } = data;
+    return <div key={path} className="content-item">
       <div className="content-item__image-container">
         <Image
           src={coverImage}
@@ -22,6 +23,7 @@ export function PortfolioList () {
         <div>{title}</div>
         <div>{description}</div>
         <p>{content}</p>
+        <Link href={`/portfolios/${path}`} >See More</Link>
       </div>
     </div>
   });
