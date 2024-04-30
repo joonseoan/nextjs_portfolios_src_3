@@ -49,3 +49,22 @@ export function getPortfolios() {
     return content;
   });
 }
+
+export function getBlogBySlug(slug: string) {
+  const fileName = `${slug}.md`;
+  const filePath = path.join(blogsMarkdownDir, fileName);
+  const { data, content } = matter(fs.readFileSync(filePath, 'utf8'));
+  data.slug = slug;
+
+  return { ...data, content };
+}
+
+
+export function getPortfolioBySlug(slug: string) {
+  const fileName = `${slug}.md`;
+  const filePath = path.join(portfoliosMarkdownDir, fileName);
+  const { data, content } = matter(fs.readFileSync(filePath, 'utf8'));
+  data.slug = slug;
+
+  return { ...data, content };
+}
